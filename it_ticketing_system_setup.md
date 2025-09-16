@@ -1,12 +1,3 @@
-# TicketingSystem
-This was such a apin to commit and i dont know why, but it should run fine. all you need to do is make sure a database existis in the sql connection(may also need to tchange the mysql connection string in data access class).
-
-run this script to make the same test database i used:
-
--- ========================================================
--- IT Ticketing System - Full Create + Seed Script
--- ========================================================
-
 DROP DATABASE IF EXISTS thisdb;
 CREATE DATABASE thisdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE thisdb;
@@ -119,31 +110,27 @@ ON DUPLICATE KEY UPDATE
 -- Seed Tickets
 INSERT INTO Tickets (customer_id, operator_id, status_id, description, time_requested)
 VALUES
--- 1) Unassigned ticket
 ((SELECT user_id FROM Users WHERE username = 'alice'), NULL,
  (SELECT status_id FROM TicketStatus WHERE status_name = 'Incomplete'),
  'Printer in HR is jammed and shows error code E13.', NOW() - INTERVAL 6 HOUR),
--- 2) Assigned, In Progress
 ((SELECT user_id FROM Users WHERE username = 'bob'),
  (SELECT user_id FROM Users WHERE username = 'it_john'),
  (SELECT status_id FROM TicketStatus WHERE status_name = 'In Progress'),
  'Laptop keeps restarting randomly; happens when opening Outlook.', NOW() - INTERVAL 2 DAY),
--- 3) Completed
 ((SELECT user_id FROM Users WHERE username = 'carol'),
  (SELECT user_id FROM Users WHERE username = 'it_sarah'),
  (SELECT status_id FROM TicketStatus WHERE status_name = 'Completed'),
  'Cannot connect to company WiFi on floor 3.', NOW() - INTERVAL 3 DAY),
--- 4) Closed
 ((SELECT user_id FROM Users WHERE username = 'alice'),
  (SELECT user_id FROM Users WHERE username = 'it_sarah'),
  (SELECT status_id FROM TicketStatus WHERE status_name = 'Closed'),
  'Email account locked out due to too many bad password attempts.', NOW() - INTERVAL 10 DAY),
--- 5) Another unassigned ticket
 ((SELECT user_id FROM Users WHERE username = 'bob'), NULL,
  (SELECT status_id FROM TicketStatus WHERE status_name = 'Incomplete'),
  'Request: Need VPN access for new contractor.', NOW() - INTERVAL 3 HOUR);
 
--- Indexes for faster queries
+-- Indexes
 CREATE INDEX idx_tickets_operator ON Tickets(operator_id);
 CREATE INDEX idx_tickets_status ON Tickets(status_id);
 CREATE INDEX idx_users_clearance ON Users(clearance_id);
+
