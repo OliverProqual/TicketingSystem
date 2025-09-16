@@ -8,7 +8,7 @@ namespace TicketingSystem
     public class DataAccess
     {
         private readonly string connectionString =
-            "server=localhost;uid=root;pwd=Po1*wk01Grqc^363Igcs47@0yBko7@38;database=thisdb";
+             "server=172.16.1.183;uid=olly;pwd=ollypass;database=thisdb;port=3306";
 
         // 🔹 Run SELECT queries and return results in a DataTable
         public DataTable ExecuteQuery(string query, Dictionary<string, object> parameters = null)
